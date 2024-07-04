@@ -27,7 +27,7 @@ A simple Todo List application built with React that allows you to add, edit, de
    git clone https://github.com/Geetha-Bhumireddy/todo_application.git
    ```
 
-   ![Clone Repository](images/clone.png)
+ 
 
 2. **Navigate to the Project Directory**
 
@@ -47,7 +47,7 @@ A simple Todo List application built with React that allows you to add, edit, de
    yarn install
    ```
 
-   ![Install Dependencies](images/install.png)
+
 
 ### Running the Application
 
@@ -65,7 +65,7 @@ A simple Todo List application built with React that allows you to add, edit, de
 
    The application should now be running at [http://localhost:3000](http://localhost:3000).
 
-   ![Start Application](images/start.png)
+  
 
 ### Building the Application
 
