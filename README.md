@@ -1,521 +1,135 @@
-<<<<<<< HEAD
-# Todo Application
 
-Given an `app.js` file and database file `todoApplication.db` with a table `todo`.
+# Todo List Application
 
-Write APIs to perform operations on the table `todo`, with the following columns,
+A simple Todo List application built with React that allows you to add, edit, delete, and mark tasks as complete. The tasks are saved in the local storage to persist between sessions.
 
-**Todo Table**
+## Features
 
-| Column   | Type    |
-| -------- | ------- |
-| id       | INTEGER |
-| todo     | TEXT    |
-| category | TEXT    |
-| priority | TEXT    |
-| status   | TEXT    |
-| due_date | DATE    |
+- **Task Input:** Add new tasks.
+- **Task List:** Display the list of tasks.
+- **Complete Status:** Mark tasks as complete.
+- **Edit Option:** Edit existing tasks.
+- **Delete Tasks:** Remove tasks from the list.
+- **Local Storage:** Save tasks to local storage.
 
-<MultiLineNote>
-  
-  - Replace the spaces in URL with `%20`.
-  - Possible values for `priority` are `HIGH`, `MEDIUM`, and `LOW`.
-  - Possible values for `status` are `TO DO`, `IN PROGRESS`, and `DONE`.
-  - Possible values for `category` are `WORK`, `HOME`, and `LEARNING`.
-  - Use the format `yyyy-MM-dd` for formating with date-fns `format` function.
-    - The user may request with due date value as `2021-1-21`, format the date to `2021-01-21` and perform Create, Read, Update operations on the database.
-</MultiLineNote>
+## Getting Started
 
-<MultiLineQuickTip>
+### Prerequisites
 
-Use `date-fns` format function to format the date. Refer to the documentation [link](https://date-fns.org/v2.19.0/docs/Getting-Started) for the usage of the `format` function.
-</MultiLineQuickTip>
+- Node.js (>= 14.x)
+- npm (>= 6.x) or yarn (>= 1.x)
 
-### Invalid scenarios for all APIs
+### Installation
 
-- **Invalid Status**
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid Todo Status
-      ```
-- **Invalid Priority**
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid Todo Priority
-      ```
-- **Invalid Category**
+1. **Clone the Repository**
 
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid Todo Category
-      ```
+   ```bash
+   git clone https://github.com/Geetha-Bhumireddy/todo_application.git
+   ```
 
-- **Invalid Due Date**
-  - **Response**
-    - **Status code**
-      ```
-      400
-      ```
-    - **Body**
-      ```
-      Invalid Due Date
-      ```
+   ![Clone Repository](images/clone.png)
 
-### API 1
+2. **Navigate to the Project Directory**
 
-#### Path: `/todos/`
+   ```bash
+   cd todo_app
+   ```
 
-#### Method: `GET`
+3. **Install Dependencies**
 
-- **Scenario 1**
+   ```bash
+   npm install
+   ```
 
-  - **Sample API**
-    ```
-    /todos/?status=TO%20DO
-    ```
-  - **Description**:
+   or
 
-    Returns a list of all todos whose status is 'TO DO'
+   ```bash
+   yarn install
+   ```
 
-  - **Response**
+   ![Install Dependencies](images/install.png)
 
-    ```
-    [
-      {
-        "id": 2,
-        "todo": "Buy a Car",
-        "priority": "MEDIUM",
-        "status": "TO DO",
-        "category": "HOME",
-        "dueDate": "2021-09-22"
-      },
-      ...
-    ]
-    ```
+### Running the Application
 
-- **Scenario 2**
+1. **Start the Development Server**
 
-  - **Sample API**
-    ```
-    /todos/?priority=HIGH
-    ```
-  - **Description**:
+   ```bash
+   npm start
+   ```
 
-    Returns a list of all todos whose priority is 'HIGH'
+   or
 
-  - **Response**
+   ```bash
+   yarn start
+   ```
 
-    ```
-    [
-      {
-        "id": 1,
-        "todo": "Learn Node JS",
-        "priority": "HIGH",
-        "status": "IN PROGRESS",
-        "category": "LEARNING",
-        "dueDate": "2021-03-16"
-      },
-      ...
-    ]
-    ```
+   The application should now be running at [http://localhost:3000](http://localhost:3000).
 
-- **Scenario 3**
+   ![Start Application](images/start.png)
 
-  - **Sample API**
-    ```
-    /todos/?priority=HIGH&status=IN%20PROGRESS
-    ```
-  - **Description**:
+### Building the Application
 
-    Returns a list of all todos whose priority is 'HIGH' and status is 'IN PROGRESS'
+To create an optimized production build:
 
-  - **Response**
-
-    ```
-    [
-      {
-        "id": 1,
-        "todo": "Learn Node JS",
-        "priority": "HIGH",
-        "status": "IN PROGRESS",
-        "category": "LEARNING",
-        "dueDate": "2021-03-16"
-      },
-      ...
-    ]
-    ```
-
-- **Scenario 4**
-
-  - **Sample API**
-    ```
-    /todos/?search_q=Buy
-    ```
-  - **Description**:
-
-    Returns a list of all todos whose todo contains 'Buy' text
-
-  - **Response**
-
-    ```
-    [
-      {
-        "id": 2,
-        "todo": "Buy a Car",
-        "priority": "MEDIUM",
-        "status": "TO DO",
-        "category": "HOME",
-        "dueDate": "2021-09-22"
-      },
-      ...
-    ]
-    ```
-
-- **Scenario 5**
-
-  - **Sample API**
-    ```
-    /todos/?category=WORK&status=DONE
-    ```
-  - **Description**:
-
-    Returns a list of all todos whose category is 'WORK' and status is 'DONE'
-
-  - **Response**
-
-    ```
-    [
-      {
-        "id": 4,
-        "todo": "Fix the bug",
-        "priority": "MEDIUM",
-        "status": "DONE",
-        "category": "WORK",
-        "dueDate": "2021-01-25"
-      },
-      ...
-    ]
-    ```
-
-- **Scenario 6**
-
-  - **Sample API**
-    ```
-    /todos/?category=HOME
-    ```
-  - **Description**:
-
-    Returns a list of all todos whose category is 'HOME'
-
-  - **Response**
-
-    ```
-    [
-      {
-        "id": 2,
-        "todo": "Buy a Car",
-        "priority": "MEDIUM",
-        "status": "TO DO",
-        "category": "HOME",
-        "dueDate": "2021-09-22"
-      },
-      ...
-    ]
-    ```
-
-- **Scenario 7**
-
-  - **Sample API**
-    ```
-    /todos/?category=LEARNING&priority=HIGH
-    ```
-  - **Description**:
-
-    Returns a list of all todos whose category is 'LEARNING' and priority is 'HIGH'
-
-  - **Response**
-
-    ```
-    [
-      {
-        "id": 1,
-        "todo": "Learn Node JS",
-        "priority": "HIGH",
-        "status": "IN PROGRESS",
-        "category": "LEARNING",
-        "dueDate": "2021-03-16"
-      },
-      ...
-    ]
-    ```
-
-### API 2
-
-#### Path: `/todos/:todoId/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns a specific todo based on the todo ID
-
-#### Response
-
-```
-{
-  "id": 1,
-  "todo": "Learn Node JS",
-  "priority": "HIGH",
-  "status": "IN PROGRESS",
-  "category": "LEARNING",
-  "dueDate": "2021-03-16"
-}
+```bash
+npm run build
 ```
 
-### API 3
+or
 
-#### Path: `/agenda/`
-
-#### Method: `GET`
-
-#### Description:
-
-Returns a list of all todos with a specific due date in the query parameter `/agenda/?date=2021-12-12`
-
-#### Response
-
-```
-[
-  {
-    "id": 3,
-    "todo": "Clean the garden",
-    "priority": "LOW",
-    "status": "TO DO",
-    "category": "HOME",
-    "dueDate": "2021-12-12"
-  },
-  ...
-]
+```bash
+yarn build
 ```
 
-### API 4
+### Running Tests
 
-#### Path: `/todos/`
+To run the tests:
 
-#### Method: `POST`
-
-#### Description:
-
-Create a todo in the todo table,
-
-#### Request
-
-```
-{
-  "id": 6,
-  "todo": "Finalize event theme",
-  "priority": "LOW",
-  "status": "TO DO",
-  "category": "HOME",
-  "dueDate": "2021-02-22"
-}
+```bash
+npm test
 ```
 
-#### Response
+or
 
-```
-Todo Successfully Added
-```
-
-### API 5
-
-#### Path: `/todos/:todoId/`
-
-#### Method: `PUT`
-
-#### Description:
-
-Updates the details of a specific todo based on the todo ID
-
-- **Scenario 1**
-
-  - **Request**
-    ```
-    {
-      "status": "DONE"
-    }
-    ```
-  - **Response**
-
-    ```
-    Status Updated
-    ```
-
-- **Scenario 2**
-
-  - **Request**
-    ```
-    {
-      "priority": "HIGH"
-    }
-    ```
-  - **Response**
-
-    ```
-    Priority Updated
-    ```
-
-- **Scenario 3**
-
-  - **Request**
-
-    ```
-    {
-      "todo": "Clean the garden"
-    }
-    ```
-
-  - **Response**
-
-    ```
-    Todo Updated
-    ```
-
-- **Scenario 4**
-
-  - **Request**
-    ```
-    {
-      "category": "LEARNING"
-    }
-    ```
-  - **Response**
-
-    ```
-    Category Updated
-    ```
-
-- **Scenario 5**
-
-  - **Request**
-    ```
-    {
-      "dueDate": "2021-01-12"
-    }
-    ```
-  - **Response**
-
-    ```
-    Due Date Updated
-    ```
-
-### API 6
-
-#### Path: `/todos/:todoId/`
-
-#### Method: `DELETE`
-
-#### Description:
-
-Deletes a todo from the todo table based on the todo ID
-
-#### Response
-
-```
-Todo Deleted
+```bash
+yarn test
 ```
 
-<br/>
+## Project Structure
 
-Use `npm install` to install the packages.
+```plaintext
+├── public
+│   ├── index.html
+│   └── ...
+├── src
+│   ├── components
+│   │   ├── Header.js
+│   │   ├── TaskInput.js
+│   │   ├── TaskList.js
+│   │   └── ...
+│   ├── App.js
+│   ├── App.css
+│   └── index.js
+├── .gitignore
+├── package.json
+├── README.md
+└── ...
+```
 
-**Export the express instance using the default export syntax.**
+## Components
 
-**Use Common JS module syntax.**
-=======
-# Getting Started with Create React App
+- **Header:** Displays the application title.
+- **TaskInput:** Input field to add new tasks.
+- **TaskList:** Lists all tasks with options to edit, delete, and mark as complete.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Local Storage
 
-## Available Scripts
+Tasks are saved to local storage, ensuring they persist between browser sessions.
 
-In the project directory, you can run:
+## Contributing
 
-### `npm start`
+Contributions are welcome! Please open an issue or submit a pull request.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## License
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
->>>>>>> d165216 (Solution)
+This project is licensed under the MIT License.
